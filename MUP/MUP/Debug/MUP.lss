@@ -1,0 +1,238 @@
+
+MUP.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000fa  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000000e  00800060  000000fa  0000016e  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  0000017c  2**0
+                  CONTENTS, READONLY
+  3 .debug_aranges 00000048  00000000  00000000  000001ac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   000001fd  00000000  00000000  000001f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 00000159  00000000  00000000  000003f1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   00000120  00000000  00000000  0000054a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  000000a4  00000000  00000000  0000066c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    0000016a  00000000  00000000  00000710  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    00000156  00000000  00000000  0000087a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000038  00000000  00000000  000009d0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	24 c0       	rjmp	.+72     	; 0x4c <__bad_interrupt>
+   4:	23 c0       	rjmp	.+70     	; 0x4c <__bad_interrupt>
+   6:	22 c0       	rjmp	.+68     	; 0x4c <__bad_interrupt>
+   8:	21 c0       	rjmp	.+66     	; 0x4c <__bad_interrupt>
+   a:	20 c0       	rjmp	.+64     	; 0x4c <__bad_interrupt>
+   c:	1f c0       	rjmp	.+62     	; 0x4c <__bad_interrupt>
+   e:	1e c0       	rjmp	.+60     	; 0x4c <__bad_interrupt>
+  10:	1d c0       	rjmp	.+58     	; 0x4c <__bad_interrupt>
+  12:	1c c0       	rjmp	.+56     	; 0x4c <__bad_interrupt>
+  14:	1b c0       	rjmp	.+54     	; 0x4c <__bad_interrupt>
+  16:	1a c0       	rjmp	.+52     	; 0x4c <__bad_interrupt>
+  18:	19 c0       	rjmp	.+50     	; 0x4c <__bad_interrupt>
+  1a:	18 c0       	rjmp	.+48     	; 0x4c <__bad_interrupt>
+  1c:	17 c0       	rjmp	.+46     	; 0x4c <__bad_interrupt>
+  1e:	16 c0       	rjmp	.+44     	; 0x4c <__bad_interrupt>
+  20:	15 c0       	rjmp	.+42     	; 0x4c <__bad_interrupt>
+  22:	14 c0       	rjmp	.+40     	; 0x4c <__bad_interrupt>
+  24:	13 c0       	rjmp	.+38     	; 0x4c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	ea ef       	ldi	r30, 0xFA	; 250
+  3a:	f0 e0       	ldi	r31, 0x00	; 0
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	ae 36       	cpi	r26, 0x6E	; 110
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
+  48:	30 d0       	rcall	.+96     	; 0xaa <main>
+  4a:	55 c0       	rjmp	.+170    	; 0xf6 <_exit>
+
+0000004c <__bad_interrupt>:
+  4c:	d9 cf       	rjmp	.-78     	; 0x0 <__vectors>
+
+0000004e <InitLed0>:
+  * @param  None
+  * @retval None
+  */
+void InitLed0(void)
+{
+	LEDPORTCONFIG |= (1<<LED0);
+  4e:	b8 9a       	sbi	0x17, 0	; 23
+  50:	08 95       	ret
+
+00000052 <InitDEBUG>:
+void InitDEBUG(void)
+{
+	int UBRValue =UBRValued;
+	
+//	UBRRH	=	(uint8_t)	(UBRValue>>8);
+	UBRRL	=	(uint8_t)	(UBRValue);
+  52:	83 e0       	ldi	r24, 0x03	; 3
+  54:	89 b9       	out	0x09, r24	; 9
+	UCSRA	&=~(1<<U2X);
+  56:	59 98       	cbi	0x0b, 1	; 11
+	UCSRC	=  (1<<URSEL)|(1<<UCSZ1) | (1<<UCSZ0);
+  58:	86 e8       	ldi	r24, 0x86	; 134
+  5a:	80 bd       	out	0x20, r24	; 32
+	UCSRB	|= (1<<TXEN) ;
+  5c:	53 9a       	sbi	0x0a, 3	; 10
+  5e:	08 95       	ret
+
+00000060 <InitAll>:
+  * @param  None
+  * @retval None
+  */
+void InitAll(void)
+{
+	InitLed0();
+  60:	f6 df       	rcall	.-20     	; 0x4e <InitLed0>
+	InitDEBUG();
+  62:	f7 df       	rcall	.-18     	; 0x52 <InitDEBUG>
+  64:	08 95       	ret
+
+00000066 <DEBUGSendChar>:
+  * @param  None
+  * @retval None
+  */
+void DEBUGSendChar(char symbol)
+{
+	while (!(UCSRA & (1<<UDRE)));
+  66:	5d 9b       	sbis	0x0b, 5	; 11
+  68:	fe cf       	rjmp	.-4      	; 0x66 <DEBUGSendChar>
+	UDR = symbol;	
+  6a:	8c b9       	out	0x0c, r24	; 12
+  6c:	08 95       	ret
+
+0000006e <DEBUGSendMass>:
+}
+void DEBUGSendMass(uint8_t * pData, uint8_t sizedata)
+{
+  6e:	ef 92       	push	r14
+  70:	ff 92       	push	r15
+  72:	0f 93       	push	r16
+  74:	1f 93       	push	r17
+  76:	cf 93       	push	r28
+  78:	df 93       	push	r29
+	for (int NumberSymbol = 0;NumberSymbol < sizedata;NumberSymbol++)
+  7a:	e6 2e       	mov	r14, r22
+  7c:	f1 2c       	mov	r15, r1
+  7e:	1e 14       	cp	r1, r14
+  80:	1f 04       	cpc	r1, r15
+  82:	64 f4       	brge	.+24     	; 0x9c <DEBUGSendMass+0x2e>
+  84:	08 2f       	mov	r16, r24
+  86:	19 2f       	mov	r17, r25
+  88:	c0 e0       	ldi	r28, 0x00	; 0
+  8a:	d0 e0       	ldi	r29, 0x00	; 0
+	{
+		DEBUGSendChar((char) *(pData+NumberSymbol));
+  8c:	f8 01       	movw	r30, r16
+  8e:	81 91       	ld	r24, Z+
+  90:	8f 01       	movw	r16, r30
+  92:	e9 df       	rcall	.-46     	; 0x66 <DEBUGSendChar>
+	while (!(UCSRA & (1<<UDRE)));
+	UDR = symbol;	
+}
+void DEBUGSendMass(uint8_t * pData, uint8_t sizedata)
+{
+	for (int NumberSymbol = 0;NumberSymbol < sizedata;NumberSymbol++)
+  94:	21 96       	adiw	r28, 0x01	; 1
+  96:	ce 15       	cp	r28, r14
+  98:	df 05       	cpc	r29, r15
+  9a:	c4 f3       	brlt	.-16     	; 0x8c <DEBUGSendMass+0x1e>
+	{
+		DEBUGSendChar((char) *(pData+NumberSymbol));
+	}
+}
+  9c:	df 91       	pop	r29
+  9e:	cf 91       	pop	r28
+  a0:	1f 91       	pop	r17
+  a2:	0f 91       	pop	r16
+  a4:	ff 90       	pop	r15
+  a6:	ef 90       	pop	r14
+  a8:	08 95       	ret
+
+000000aa <main>:
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+int main(void)
+{
+  aa:	cf 93       	push	r28
+  ac:	df 93       	push	r29
+  ae:	cd b7       	in	r28, 0x3d	; 61
+  b0:	de b7       	in	r29, 0x3e	; 62
+  b2:	2d 97       	sbiw	r28, 0x0d	; 13
+  b4:	0f b6       	in	r0, 0x3f	; 63
+  b6:	f8 94       	cli
+  b8:	de bf       	out	0x3e, r29	; 62
+  ba:	0f be       	out	0x3f, r0	; 63
+  bc:	cd bf       	out	0x3d, r28	; 61
+	uint8_t Test[] = "Test Message";
+  be:	8d e0       	ldi	r24, 0x0D	; 13
+  c0:	e0 e6       	ldi	r30, 0x60	; 96
+  c2:	f0 e0       	ldi	r31, 0x00	; 0
+  c4:	de 01       	movw	r26, r28
+  c6:	11 96       	adiw	r26, 0x01	; 1
+  c8:	01 90       	ld	r0, Z+
+  ca:	0d 92       	st	X+, r0
+  cc:	8a 95       	dec	r24
+  ce:	e1 f7       	brne	.-8      	; 0xc8 <main+0x1e>
+	InitAll();
+  d0:	c7 df       	rcall	.-114    	; 0x60 <InitAll>
+	UDR = 0x31;
+  d2:	81 e3       	ldi	r24, 0x31	; 49
+  d4:	8c b9       	out	0x0c, r24	; 12
+  d6:	88 ee       	ldi	r24, 0xE8	; 232
+  d8:	93 e0       	ldi	r25, 0x03	; 3
+  da:	01 97       	sbiw	r24, 0x01	; 1
+	for(int i=0;i<1000;i++);
+  dc:	00 97       	sbiw	r24, 0x00	; 0
+  de:	e9 f7       	brne	.-6      	; 0xda <main+0x30>
+	DEBUGSendChar('5');
+  e0:	85 e3       	ldi	r24, 0x35	; 53
+  e2:	c1 df       	rcall	.-126    	; 0x66 <DEBUGSendChar>
+	DEBUGSendMass(Test, sizeof(Test));
+  e4:	6d e0       	ldi	r22, 0x0D	; 13
+  e6:	ce 01       	movw	r24, r28
+  e8:	01 96       	adiw	r24, 0x01	; 1
+  ea:	c1 df       	rcall	.-126    	; 0x6e <DEBUGSendMass>
+	while(1)
+	{
+        LEDCHANGE;
+  ec:	91 e0       	ldi	r25, 0x01	; 1
+  ee:	88 b3       	in	r24, 0x18	; 24
+  f0:	89 27       	eor	r24, r25
+  f2:	88 bb       	out	0x18, r24	; 24
+  f4:	fc cf       	rjmp	.-8      	; 0xee <main+0x44>
+
+000000f6 <_exit>:
+  f6:	f8 94       	cli
+
+000000f8 <__stop_program>:
+  f8:	ff cf       	rjmp	.-2      	; 0xf8 <__stop_program>

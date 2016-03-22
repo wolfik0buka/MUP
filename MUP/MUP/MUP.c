@@ -31,13 +31,16 @@
   */
 int main(void)
 {
+	uint8_t Test[] = "Test Message";
 	InitAll();
+	UDR = 0x31;
+	for(int i=0;i<1000;i++);
+	DEBUGSendChar('5');
+	DEBUGSendMass(Test, sizeof(Test));
 	while(1)
-    {
-        LED0ON;
-		for (int i;i<1000000;i++);
-		LED0OFF;
-		for (int i;i<1000000;i++);
+	{
+        LEDCHANGE;
+		
 	}
 }
 /**
@@ -50,6 +53,22 @@ void InitLed0(void)
 {
 	LEDPORTCONFIG |= (1<<LED0);
 }
+/**
+  * @brief Инициализация UART Передатчика для отладки.
+  * скорость задана в файле main.h.
+  * @param  None
+  * @retval None
+  */
+void InitDEBUG(void)
+{
+	int UBRValue =UBRValued;
+	
+//	UBRRH	=	(uint8_t)	(UBRValue>>8);
+	UBRRL	=	(uint8_t)	(UBRValue);
+	UCSRA	&=~(1<<U2X);
+	UCSRC	=  (1<<URSEL)|(1<<UCSZ1) | (1<<UCSZ0);
+	UCSRB	|= (1<<TXEN) ;
+}
 
 /**
   * @brief  Инициализирует всю необходимую переферию.
@@ -59,5 +78,26 @@ void InitLed0(void)
 void InitAll(void)
 {
 	InitLed0();
+	InitDEBUG();
+}
+
+
+
+/**
+  * @brief  Отправка символа в DEBUG.
+  * @param  None
+  * @retval None
+  */
+void DEBUGSendChar(char symbol)
+{
+	while (!(UCSRA & (1<<UDRE)));
+	UDR = symbol;	
+}
+void DEBUGSendMass(uint8_t * pData, uint8_t sizedata)
+{
+	for (int NumberSymbol = 0;NumberSymbol < sizedata;NumberSymbol++)
+	{
+		DEBUGSendChar((char) *(pData+NumberSymbol));
+	}
 }
 /******************* AME 2016*****END OF FILE****/
