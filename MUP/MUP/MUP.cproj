@@ -121,6 +121,21 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ADCFunc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ADCFunc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="DEBUG.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="EEPROM.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="EEPROM.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="MUP.c">
       <SubType>compile</SubType>
     </Compile>

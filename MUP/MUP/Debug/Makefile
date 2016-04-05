@@ -37,6 +37,9 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../ADCFunc.c \
+../DEBUG.c \
+../EEPROM.c \
 ../MUP.c
 
 
@@ -47,15 +50,27 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+ADCFunc.o \
+DEBUG.o \
+EEPROM.o \
 MUP.o
 
 OBJS_AS_ARGS +=  \
+ADCFunc.o \
+DEBUG.o \
+EEPROM.o \
 MUP.o
 
 C_DEPS +=  \
+ADCFunc.d \
+DEBUG.d \
+EEPROM.d \
 MUP.d
 
 C_DEPS_AS_ARGS +=  \
+ADCFunc.d \
+DEBUG.d \
+EEPROM.d \
 MUP.d
 
 OUTPUT_FILE_PATH +=MUP.elf
@@ -72,6 +87,12 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
+
+
+
+
 
 
 
